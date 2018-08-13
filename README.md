@@ -39,8 +39,8 @@ The parameters were chosen by manual tuning (try and error method):
 - The final parameters where Kp: 0.12, Ki: 0.00001, Kd: 2.1.
 
 Next optimization steps (not implemented yet):
-- Implement PID controller for speed (acceleration)
-- Implement steering and speed PID controllers in relation to each other
+- Implement velocity PID Controller that controls the throttle value
+- Implement steering and velocity PID controllers in relation to each other
 - Implement twiddle method to find out hyperparameters
 
 ## Dependencies
