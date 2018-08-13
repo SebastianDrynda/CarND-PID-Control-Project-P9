@@ -28,7 +28,7 @@ The parameters were chosen by manual tuning (try and error method):
 - First, make sure the car can drive straight with zero as parameters. 
 - Then add the proportional and the car start going on following the road but it starts overshooting go out of it. 
 - Then add the differential to try to overcome the overshooting. 
-- The integral part only moved the car out of the road; so, it set very small. 
+- The integral part moved the car out of the road; so, it set very small. 
 - After the car drove the track without going out of it, the parameters increased to minimize the average cross-track error on a single track lap. 
 - The final parameters where Kp: 0.12, Ki: 0.00001, Kd: 2.1.
 
