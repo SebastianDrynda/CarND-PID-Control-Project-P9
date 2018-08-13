@@ -11,22 +11,26 @@ The PID implementation is done on the [./src/PID.cpp](./src/PID.cpp). The [PID::
 
 ## Reflection
 
-### How PID control works
-
 PID controllers are quite short to implement in code, but some knowledge for their parameters and characteristics are required to tune them properly in order to get a satisfactory result.
 
 The parameters work as following:
 
-- Kp is the coefficient representing the 'proportional' (P) part of the PID controller. In our case, the car Cross-Track Error (CTE) for a given step is multiplied by negative Kp, in order to provide a steering output proportional to the CTE. What this means is that a greater CTE will induce a sharper turn towards the desired trajectory.
-- Kd is the coefficient representing the 'derivative' (D) part of the PID controller. The Kd is multiplied by the difference of the last two CTEs (in other words, the rate of change in the CTE). A negative change in successive CTE measurements (driving towards the desired trajectory) will dampen/smoothen the turn towards the desired trajectory, but a greater change in successive CTE measurements will provoke a sharper turn towards the trajectory. A properly tuned Kd (or derivative part) balances the proportional part in a way, effectively damping/smoothing the oscillations caused by the proportional control part.
-- Ki is the coefficient representing the 'integral' (I) part of the PID controller. We use Ki to correct long-term drifts to the left or right of a lane, by multiplying Ki to the sum of all the CTEs from the beginning to the present moment. Deviations occuring for a longer period of time will (with time) be corrected (i.e. constantly driving to the left of the track inside the simulator will be corrected faster, as the sum of all CTE errors increases.
+- Kp is the coefficient representing the 'proportional' (P) part of the PID controller. In our case, the car Cross-Track Error (CTE) for a given step is multiplied by negative Kp, in order to provide a steering output proportional to the CTE. What this means is that a greater CTE will induce a sharper turn towards the desired trajectory. If used alone, the car overshoots the central line very easily and go out of the road very quickly. An example video where this component is used alone is [./videos/only-proportional.mov](./videos/only-proportional.mov).
+
+- Kd is the coefficient representing the 'derivative' (D) part of the PID controller. The Kd is multiplied by the difference of the last two CTEs (in other words, the rate of change in the CTE). A negative change in successive CTE measurements (driving towards the desired trajectory) will dampen/smoothen the turn towards the desired trajectory, but a greater change in successive CTE measurements will provoke a sharper turn towards the trajectory. A properly tuned Kd (or derivative part) balances the proportional part in a way, effectively damping/smoothing the oscillations caused by the proportional control part. An example video where this component is used alone is [./videos/only-differential.mov](./videos/only-differential.mov).
+
+
+- Ki is the coefficient representing the 'integral' (I) part of the PID controller. We use Ki to correct long-term drifts to the left or right of a lane, by multiplying Ki to the sum of all the CTEs from the beginning to the present moment. Deviations occuring for a longer period of time will (with time) be corrected (i.e. constantly driving to the left of the track inside the simulator will be corrected faster, as the sum of all CTE errors increases. An example video where this component is used along is [./videos/only-integral.mov](./videos/only-integral.mov).
 
 
 ### Describe the effect each of the P, I, D components had in your implementation.
 
-- The proportional portion of the controller tries to steer the car toward the center line (against the cross-track error). If used alone, the car overshoots the central line very easily and go out of the road very quickly. An example video where this component is used along is [./videos/only-proportional.mov](./videos/only-proportional.mov).
-- The integral portion tries to eliminate a possible bias on the controlled system that could prevent the error to be eliminated. If used alone, it makes the car to go in circles. In the case of the simulator, no bias is present. An example video where this component is used along is [./videos/only-integral.mov](./videos/only-integral.mov).
-- The differential portion helps to counteract the proportional trend to overshoot the center line by smoothing the approach to it. An example video where this component is used alone is [./videos/only-differential.mov](./videos/only-differential.mov).
+- Kp is the coefficient representing the 'proportional' (P) part of the PID controller. In our case, the car Cross-Track Error (CTE) for a given step is multiplied by negative Kp, in order to provide a steering output proportional to the CTE. What this means is that a greater CTE will induce a sharper turn towards the desired trajectory. If used alone, the car overshoots the central line very easily and go out of the road very quickly. An example video where this component is used alone is [./videos/only-proportional.mov](./videos/only-proportional.mov).
+
+- Kd is the coefficient representing the 'derivative' (D) part of the PID controller. The Kd is multiplied by the difference of the last two CTEs (in other words, the rate of change in the CTE). A negative change in successive CTE measurements (driving towards the desired trajectory) will dampen/smoothen the turn towards the desired trajectory, but a greater change in successive CTE measurements will provoke a sharper turn towards the trajectory. A properly tuned Kd (or derivative part) balances the proportional part in a way, effectively damping/smoothing the oscillations caused by the proportional control part. An example video where this component is used alone is [./videos/only-differential.mov](./videos/only-differential.mov).
+
+
+- Ki is the coefficient representing the 'integral' (I) part of the PID controller. We use Ki to correct long-term drifts to the left or right of a lane, by multiplying Ki to the sum of all the CTEs from the beginning to the present moment. Deviations occuring for a longer period of time will (with time) be corrected (i.e. constantly driving to the left of the track inside the simulator will be corrected faster, as the sum of all CTE errors increases. An example video where this component is used along is [./videos/only-integral.mov](./videos/only-integral.mov).
 
 ### Describe how the final hyperparameters were chosen.
 
