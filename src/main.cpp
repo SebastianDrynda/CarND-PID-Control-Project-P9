@@ -38,6 +38,17 @@ int main() {
 
   PID pid;
   // TODO: Initialize the pid variable.
+  // Only proportional
+  // pid.Init(1, 0.0, 0.0);
+
+  // Only integral
+  // pid.Init(0.0, 1.0, 0.0);
+
+  // Only differential
+  // pid.Init(0.0, 0.0, 1.0);
+
+  // Final parameters
+  pid.Init(0.12, 0.00001, 2.1);
 
   h.onMessage(
       [&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -53,22 +64,32 @@ int main() {
             if (event == "telemetry") {
               // j[1] is the data JSON object
               double cte = std::stod(j[1]["cte"].get<std::string>());
-              double speed = std::stod(j[1]["speed"].get<std::string>());
-              double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-              double steer_value;
+              // double speed = std::stod(j[1]["speed"].get<std::string>());
+              // double angle = std::stod(j[1]["steering_angle"].get<std::string>());
+              double steer_value = 0.0;
               /*
                * TODO: Calcuate steering value here, remember the steering value is
                * [-1, 1].
                * NOTE: Feel free to play around with the throttle and speed. Maybe use
                * another PID controller to control the speed!
                */
+              pid.UpdateError(cte);
+              steer_value -= pid.TotalError();
+
+              if(steer_value < -1.0)
+                steer_value = -1.0;
+              else if(steer_value > 1.0)
+                steer_value = 1.0;
 
               // DEBUG
               std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
 
               json msgJson;
               msgJson["steering_angle"] = steer_value;
+
+              // Next step: adjust speed (acceleration) using an own PID controller.
               msgJson["throttle"] = 0.3;
+
               auto msg = "42[\"steer\"," + msgJson.dump() + "]";
               std::cout << msg << std::endl;
               ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);

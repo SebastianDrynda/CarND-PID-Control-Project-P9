@@ -9,6 +9,13 @@ class PID {
   double p_error;
   double i_error;
   double d_error;
+  double prev_cte;
+
+  /**
+   * Error counters
+   **/
+  long counter;
+  double errorSum;
 
   /*
    * Coefficients
@@ -41,6 +48,7 @@ class PID {
    * Calculate the total PID error.
    */
   double TotalError();
+
 };
 
 #endif /* PID_H */
